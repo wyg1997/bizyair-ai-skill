@@ -6,7 +6,15 @@ An agent skill for [BizyAir.ai](https://www.bizyair.ai/) — international image
 
 This skill lets the agent interact with the BizyAir.ai API to search models, run AI apps, query task results, and manage account assets — all through natural language.
 
- ## Features
+## Installation
+
+Provide this repository URL to your agent:
+
+```
+https://github.com/wyg1997/bizyair-ai-skill
+```
+
+## Features
 
  | Category | Capability | CLI Command |
  |---|---|---|

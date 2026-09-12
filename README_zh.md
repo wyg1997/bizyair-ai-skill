@@ -6,7 +6,15 @@ English | [中文](README_zh.md)
 
 该 Skill 让智能体通过自然语言与 BizyAir.ai API 交互，实现模型搜索、运行 AI 应用、查询任务结果和管理账户资产等功能。
 
- ## 功能概览
+## 安装方式
+
+将此仓库链接提供给智能体即可：
+
+```
+https://github.com/wyg1997/bizyair-ai-skill
+```
+
+## 功能概览
 
  | 分类 | 功能 | CLI 命令 |
  |---|---|---|
