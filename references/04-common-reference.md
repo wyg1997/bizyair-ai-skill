@@ -66,7 +66,7 @@ Friendly hints are in `config/error_codes.json`.
 | boolean | bool |
 | number / slider / slides | number |
 | seed | number (-1 = random) |
-| images | list[str] (URLs after upload) |
+| images | list[str] (URLs after upload, or `data:image/...;base64,...` data URLs directly) |
 | audios / videos | string URL |
 
 `field_options` is already a dict (no extra parse needed).

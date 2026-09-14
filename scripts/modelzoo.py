@@ -66,6 +66,17 @@ def _coerce(field_type: str, value):
     return value
 
 
+def encode_local_image(path: str) -> str:
+    """Read a local image file and return a base64 data URL."""
+    import base64
+    import os
+    ext = os.path.splitext(path)[1].lower().lstrip(".")
+    mime = {"jpg": "jpeg", "jpeg": "jpeg", "png": "png", "webp": "webp", "bmp": "bmp"}.get(ext, "jpeg")
+    with open(path, "rb") as fh:
+        b64 = base64.b64encode(fh.read()).decode()
+    return f"data:image/{mime};base64,{b64}"
+
+
 def create_task(endpoint: str, payload: dict):
     """POST /v1/modelzoo/tasks/openapi/<endpoint> -- async, returns {request_id}."""
     return common.request("POST", f"v1/modelzoo/tasks/openapi/{endpoint}", json_body=payload)

@@ -55,6 +55,9 @@ See `references/05-auth-and-api-key.md` for setup details.
 | Search community AI Apps | `cli.py app-search "<keyword>"` / `cli.py app-search "<keyword>" --md` |
 | List all community AI Apps | `cli.py app-md` / `cli.py app-md --save` |
 | Run an AI app (async) | `cli.py app-detail <web_app_id>` -> `cli.py run <web_app_id> --prompt "..."` |
+| Upload local media to OSS | `upload.py <local_path>` (requires `oss2` package) |
+| Run a ModelZoo endpoint directly | `cli.py modelzoo-run <endpoint> --json '{...}'` |
+| Query ModelZoo task status | `cli.py modelzoo-status <request_id>` |
 | Query task status / outputs | `cli.py status <request_id>` / `cli.py outputs <request_id>` |
 
 ## Module routing
@@ -66,6 +69,8 @@ See `references/05-auth-and-api-key.md` for setup details.
 | AI app + ModelZoo tasks (create/poll/outputs) | `references/03-ai-app-tasks.md` |
 | Common conventions (headers, errors, status, URL expiry) | `references/04-common-reference.md` |
 | API key setup and URL routing | `references/05-auth-and-api-key.md` |
+| Media upload (OSS STS) + ModelZoo task execution, field naming, pitfalls | `references/06-media-upload-and-modelzoo-tasks.md` |
+| Image composition, cards, text overlay (PIL workflow + AI illustration) | `references/07-image-composition-and-cards.md` |
 
 ## Rules
 
@@ -83,6 +88,24 @@ See `references/05-auth-and-api-key.md` for setup details.
    debugging.
 8. **Search terms are model words.** For ModelZoo search, translate the user's intent into
    real model / series / task-type keywords (e.g. `kling`, `seedance`, `text-to-video`).
+9. **Cards: extract → transform → label.** When the user asks for a "card" or "迎宾照片"
+   from a photo, they want the subject **extracted** onto a clean background and
+   **transformed** (e.g. illustration or realistic stylization), then **text added
+   locally with PIL**. Do NOT just overlay text on the original photo.
+   ⚠️ **Default to photorealistic style, not cartoon.** If the user does not explicitly
+   ask for cartoon/chibi/illustration, generate a **realistic** transformation
+   (real fur texture, studio lighting, natural proportions). See
+   `references/07-image-composition-and-cards.md`.
+10. **Field names differ per model.** Always run `modelzoo-detail <endpoint>` and read
+    `input_params` before constructing a `modelzoo-run` payload. Image fields are named
+    differently across models (`images`, `ref_images`, `first_frame_url`). See
+    `references/06-media-upload-and-modelzoo-tasks.md` for the field-name cheat sheet.
+11. **Local images: prefer base64.** Local files can be passed directly as
+    `data:image/jpeg;base64,...` data URLs in the task payload — no OSS upload needed.
+    Use `modelzoo.encode_local_image(path)` to generate the data URL, or call
+    `upload.py <path>` for the OSS URL route (requires `oss2` package) when the
+    image is very large or needs a persistent public URL.
+    See `references/06-media-upload-and-modelzoo-tasks.md` for both paths.
 
 ## Quick reference
 

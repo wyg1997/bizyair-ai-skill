@@ -55,8 +55,9 @@ The standard-model API runs a ModelZoo endpoint directly:
 Both are served from `https://api.bizyair.ai`.
 
 Build the payload from `modelzoo-detail` -> `input_params` (`cli.py` `modelzoo.build_payload`
-coerces types). Media inputs (images/audios/videos) must be uploaded to OSS first
-(`GET /v1/upload/token` -> commit), then passed as URLs.
+coerces types). Media inputs (images/audios/videos) can be passed as URLs after uploading to OSS
+(`GET /v1/upload/token` -> commit), OR directly as base64 data URLs
+(`data:image/jpeg;base64,...`) — no upload needed.
 
 ```bash
 python3 scripts/cli.py modelzoo-run <endpoint> --json '{"prompt":"a cat","image_size":"1024x1024"}'
