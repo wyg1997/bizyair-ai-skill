@@ -58,7 +58,7 @@ https://github.com/wyg1997/bizyair-ai-skill
 
  ### 2. 配置
 
- 编辑 `config.json`，替换占位符：
+ 复制 `config.json.example` 为 `config.json`，替换占位符：
 
  ```json
  {
@@ -85,7 +85,8 @@ https://github.com/wyg1997/bizyair-ai-skill
  ```
  bizyair-ai-skill/
  ├── SKILL.md              # 智能体 Skill 说明
- ├── config.json           # API 密钥与客户端配置
+ ├── config.json           # API 密钥与客户端配置（不跟踪）
+├── config.json.example   # 模板 — 复制为 config.json
  ├── config/
  │   ├── menus.json        # 精选模型菜单文本
  │   └── error_codes.json  # 错误码映射

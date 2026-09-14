@@ -3,6 +3,7 @@ name: "bizyair-ai-skill"
 description: "BizyAir.ai (international) image/video generation and model execution. Call it when the user mentions BizyAir.ai, wants to generate images/video, sends a bizyair.ai link or model endpoint, or wants to search BizyAir.ai models."
 homepage: https://www.bizyair.ai
 license: MIT
+repository: https://github.com/wyg1997/bizyair-ai-skill
 ---
 
 # BizyAir.ai Skill
@@ -29,7 +30,7 @@ See `references/05-auth-and-api-key.md` for setup details.
 
 ### Allowed
 - ModelZoo catalog search, detail, price (public, anonymous)
-- AI app task create + query + outputs + cancel/interrupt
+- AI app task create + query + outputs
 - ModelZoo task create + query
 - Account / wallet queries
 

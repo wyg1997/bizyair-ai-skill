@@ -58,7 +58,7 @@ https://github.com/wyg1997/bizyair-ai-skill
 
  ### 2. Configure
 
- Edit `config.json` and replace the placeholder:
+ Copy `config.json.example` to `config.json` and replace the placeholder:
 
  ```json
  {
@@ -85,7 +85,8 @@ https://github.com/wyg1997/bizyair-ai-skill
  ```
  bizyair-ai-skill/
  ├── SKILL.md              # Skill instructions for the agent
- ├── config.json           # API key and client config
+ ├── config.json           # API key and client config (not tracked)
+├── config.json.example   # Template — copy to config.json
  ├── config/
  │   ├── menus.json        # Curated model menu text
  │   └── error_codes.json  # Error code mappings
