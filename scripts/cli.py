@@ -103,13 +103,12 @@ def main():
     }
     # modelzoo-run / modelzoo-status are best-effort; expose through modelzoo module
     if cmd == "modelzoo-run":
-        import json as _json
         ep = rest[0]
         payload = {}
         i = 1
         while i < len(rest):
             if rest[i] == "--json" and i + 1 < len(rest):
-                payload = _json.loads(rest[i + 1])
+                payload = json.loads(rest[i + 1])
                 i += 2
             elif rest[i] == "--param" and i + 1 < len(rest):
                 k, v = rest[i + 1].split("=", 1)

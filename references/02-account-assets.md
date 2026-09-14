@@ -28,7 +28,3 @@ python3 scripts/cli.py whoami
 
 `GET /meta/v1/user/info` -> id, name, avatar, email, level, etc.
 
-## Userspace detail
-
-`GET /meta/v1/userspace/{user_id}/detail` (used internally by `account.userspace_detail`)
-returns profile metadata, counter, followed status.

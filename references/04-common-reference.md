@@ -50,7 +50,6 @@ Client (won't fix by retry): `20015` invalid param, `20021` moderation, `20052/2
 bad/expired/exhausted API key, `20224` web app not found, `30008` please login,
 `30009` task not found, `40025` empty input_values.
 
-Friendly hints are in `config/error_codes.json`.
 
 ## Output URLs
 

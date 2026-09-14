@@ -14,14 +14,6 @@ def wallet():
     return common.unwrap_data(common.request("GET", "finance/v1/wallet"))
 
 
-def userspace_detail():
-    """GET /meta/v1/userspace/{user_id}/detail -- profile/identity counter/followed."""
-    user = user_info()
-    uid = user.get("id") if isinstance(user, dict) else None
-    if not uid:
-        return None
-    return common.unwrap_data(common.request("GET", f"meta/v1/userspace/{uid}/detail"))
-
 
 def check():
     """Validate the configured API key. Returns a status dict.

@@ -184,3 +184,21 @@ def out(value: Any, *, indent: int = 2) -> None:
 
 def cfg_display_path() -> str:
     return str(CONFIG_PATH)
+
+
+def poll_until_done(query_fn, request_id: str, *, interval: int = 5, max_seconds: int = 900):
+    """Poll a task status function until terminal status or timeout.
+
+    query_fn should take a request_id and return a dict with a 'status' key.
+    Terminal statuses: Success, Failed, Canceled.
+    """
+    import time
+    deadline = time.time() + max_seconds
+    last = None
+    while time.time() < deadline:
+        last = query_fn(request_id)
+        status = (last.get("status") if isinstance(last, dict) else None) or ""
+        if status in ("Success", "Failed", "Canceled"):
+            return last
+        time.sleep(interval)
+    return last

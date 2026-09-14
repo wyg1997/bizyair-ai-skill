@@ -45,6 +45,7 @@ See `references/05-auth-and-api-key.md` for setup details.
 |---|---|
 | Validate the API key / see why auth fails | `cli.py check` |
 | Wallet balance | `cli.py wallet` |
+| Current user info | `cli.py whoami` |
 | Curated image / video model menu | `cli.py image-menu` / `video-menu` |
 | Search ModelZoo endpoints | `cli.py modelzoo-list ["keyword"]` |
 | ModelZoo endpoint detail | `cli.py modelzoo-detail <endpoint>` |
