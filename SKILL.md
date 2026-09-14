@@ -70,7 +70,6 @@ See `references/05-auth-and-api-key.md` for setup details.
 | Common conventions (headers, errors, status, URL expiry) | `references/04-common-reference.md` |
 | API key setup and URL routing | `references/05-auth-and-api-key.md` |
 | Media upload (OSS STS) + ModelZoo task execution, field naming, pitfalls | `references/06-media-upload-and-modelzoo-tasks.md` |
-| Skill maintenance & git workflow (commits, push, API key safety) | `references/08-skill-maintenance-and-git-workflow.md` |
 
 ## Rules
 
