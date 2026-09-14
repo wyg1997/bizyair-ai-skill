@@ -19,8 +19,6 @@ payload = {"image_urls": [data_url], "prompt": "...", ...}
 modelzoo.create_task("endpoint", payload)
 ```
 
-Works with all tested models: Happyhorse, Seedance, Qwen Image, Nano Banana (when upstream is healthy).
-
 ## OSS upload flow (for large files or persistent URLs)
 
 ### Prerequisites
@@ -61,40 +59,40 @@ python3 scripts/cli.py modelzoo-run <endpoint> --json '{...}'
 python3 scripts/cli.py modelzoo-status <request_id>
 ```
 
-### Field naming differs across models
+### Always search dynamically — never hardcode model names
 
-Each model endpoint has different field names for the image input. **Always check
-`modelzoo-detail <endpoint>` → `input_params` before constructing the payload.**
+The model catalog changes over time. **Always discover endpoints at runtime:**
 
-| Model | Image field name | Notes |
-|---|---|---|
-| Vidu Q3 Pro | `images` | Array of URLs, max 1 |
-| Happyhorse 1.0 | `first_frame_url` | Array of URLs, max 1 |
-| Seedance 2.0 | `ref_images` | Array of URLs (reference-to-video) |
-| Kling 3.0 Pro | (FLF) uses first/last frame | Check detail for exact field |
-| Wan 2.7 | (FLF) uses first/last frame | Check detail for exact field |
-| Nano Banana 2 / Pro | `image_urls` | Array, max 8 |
-| Qwen Image 2.0 | `image_urls` | Array, max 3 |
+```bash
+# Search by task type or model series
+python3 scripts/cli.py modelzoo-list "text-to-video"
+python3 scripts/cli.py modelzoo-list "image-to-image"
+python3 scripts/cli.py modelzoo-pick "kling"
 
-### Common parameters
+# Then inspect the endpoint's input parameters before building a payload
+python3 scripts/cli.py modelzoo-detail <endpoint>
+```
 
-| Parameter | Type | Notes |
-|---|---|---|
-| `prompt` | string | Text description of desired motion/action |
-| `duration` | number (slider) | Range varies by model (e.g. 3~15, 4~16) |
-| `resolution` | combo | 480p / 720p / 1080p / 4k (varies) |
-| `aspect_ratio` | combo | auto/16:9/9:16/4:3/3:4/1:1/21:9 (Seedance) |
-| `generate_audio` | boolean | Vidu + Seedance support this |
-| `audio_type` | combo | Vidu only: all / speech_only / sound_effect_only |
-| `seed` | number | -1 = random |
+Never assume a specific model/endpoint still exists or has the same parameters.
+**Always run `modelzoo-detail <endpoint>` → read `input_params`** to get the exact
+field names, types, and allowed values for that endpoint.
 
-### Image editing models
+### Common field patterns
 
-| Model | Endpoint | Min credits | Notes |
-|---|---|---|---|
-| Qwen Image 2.0 | `qwen-image-2-0-official/image-to-image` | 40 | Reliable, supports Chinese prompts |
-| Nano Banana 2 | `nano-banana-2-official/image-to-image` | 40 | Google Gemini 3.1 Flash Image |
-| Nano Banana Pro | `nano-banana-pro-official/image-to-image` | 100 | Higher quality, may be less stable |
+Field names vary across models. Common patterns seen in the catalog:
+
+| Pattern | Typical usage |
+|---|---|
+| `images` / `image_urls` | Array of image URLs or data URLs |
+| `ref_images` | Reference images for image-to-video tasks |
+| `first_frame_url` / `last_frame_url` | First/last frame for video generation |
+| `prompt` | Text description of desired output |
+| `duration` | Video length (slider, range varies by model) |
+| `resolution` | 480p / 720p / 1080p / 4k (varies by model) |
+| `aspect_ratio` | auto/16:9/9:16/4:3/3:4/1:1 (varies) |
+| `seed` | number (-1 = random) |
+
+These are **patterns, not guarantees** — always confirm via `modelzoo-detail`.
 
 ### Task lifecycle
 
@@ -122,14 +120,12 @@ done
 
 ## Pitfalls
 
-1. **Vidu API timeouts** — Vidu Q3 Pro may fail with "dial tcp ... connection timed out"
-   (the call goes api.bizyair.ai → api.vidu.cn which may be temporarily unreachable).
-   Retry or fall back to Seedance / Happyhorse.
+1. **Upstream timeouts** — Some model endpoints may fail with connection timeouts when
+   the upstream provider is temporarily unreachable. Retry or use `modelzoo-list` to
+   find alternative models.
 
-2. **Nano Banana upstream failures** — Nano Banana 2 and Pro may fail with
-   "empty output: no data resolved from upstream response" or "服务侧处理响应时异常".
-   This is an upstream Google API issue, not a payload problem. Fall back to Qwen Image 2.0
-   which is more reliable for image editing tasks.
+2. **Upstream failures** — Some models may return "empty output" or service-side errors.
+   This is an upstream issue, not a payload problem. Use `modelzoo-list` to find fallbacks.
 
 3. **`put_object_from_file` argument** — oss2's `put_object_from_file` takes a file
    **path string**, not a file object. Passing a BufferedReader raises TypeError.
@@ -137,17 +133,13 @@ done
 4. **Field type coercion** — `images`-type fields accept `list[str]`, but passing a
    bare string works because `_coerce()` in modelzoo.py wraps it in a list.
 
-5. **Resolution naming** — Happyhorse uses uppercase (`720P`, `1080P`); Vidu and
-   Seedance use lowercase (`720p`, `1080p`). Check `field_options.values` in detail.
+5. **Resolution naming** — Some models use uppercase (`720P`, `1080P`); others use
+   lowercase (`720p`, `1080p`). Check `field_options.values` in detail.
 
 6. **Cost awareness** — always check `modelzoo-price` or `min_credits` before running.
-   4K generation can cost 600+ credits.
+   High-resolution generation can cost hundreds of credits.
 
-7. **Chinese prompts for Qwen** — Qwen Image 2.0 handles Chinese-language edit
-   instructions well (e.g. 磨皮, 淡化黑眼圈, 提亮肤色). Use Chinese for beauty
-   retouching and style-specific edits; use English for general image-to-video.
-
-8. **oss2 install in restricted environments** — `uv pip install oss2` into a shared
+7. **oss2 install in restricted environments** — `uv pip install oss2` into a shared
    venv may fail with permission denied. Create a throwaway venv instead:
    `uv venv /tmp/bizyair_venv && uv pip install --python /tmp/bizyair_venv/bin/python oss2`
    Then run the upload script with `/tmp/bizyair_venv/bin/python`.
