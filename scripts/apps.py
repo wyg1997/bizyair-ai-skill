@@ -54,10 +54,10 @@ def format_markdown_apps(items: list) -> str:
     lines.append("| Name | Base Model | web_app_id | Version |")
     lines.append("|---|---|---|---|")
     for it in items:
-        name = str(it.get("name", "")).replace("|", "\|")
-        bm = str(it.get("base_model", "-") or "-").replace("|", "\|")
+        name = str(it.get("name", "")).replace("|", "\\|")
+        bm = str(it.get("base_model", "-") or "-").replace("|", "\\|")
         wid = f"`{it.get('web_app_id', '-')}`"
-        ver = str(it.get("version", "-") or "-").replace("|", "\|")
+        ver = str(it.get("version", "-") or "-").replace("|", "\\|")
         lines.append(f"| {name} | {bm} | {wid} | {ver} |")
     lines.append("")
     lines.append('Run with: `python3 scripts/cli.py run <web_app_id> --prompt "..."`')

@@ -97,6 +97,9 @@ See `references/05-auth-and-api-key.md` for setup details.
     `upload.py <path>` for the OSS URL route (requires `oss2` package) when the
     image is very large or needs a persistent public URL.
     See `references/06-media-upload-and-modelzoo-tasks.md` for both paths.
+11. **Never hardcode model names or endpoints.** The model catalog changes over time.
+    Always discover endpoints at runtime via `modelzoo-list` / `modelzoo-detail`.
+    Documentation must describe field-name *patterns*, not fixed per-model tables.
 
 ## Quick reference
 

@@ -10,7 +10,7 @@ import common
 
 
 def app_detail(web_app_id):
-    """GET /v1/webapp/{web_app_id}/detail -- metadata + input_nodes for prefill."""
+    """GET /meta/v1/webapp/{web_app_id}/detail -- metadata + input_nodes for prefill."""
     return common.unwrap_data(common.request("GET", f"meta/v1/webapp/{web_app_id}/detail"))
 
 

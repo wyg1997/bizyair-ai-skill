@@ -95,13 +95,15 @@ https://github.com/wyg1997/bizyair-ai-skill
  │   ├── modelzoo.py       # ModelZoo catalog commands
  │   ├── apps.py           # AI App commands
  │   ├── tasks.py          # Task create/query commands
- │   └── account.py        # Account/wallet commands
+ │   ├── account.py        # Account/wallet commands
+ │   └── upload.py         # OSS media upload script
  └── references/           # API reference docs (auth, catalog, tasks, etc.)
      ├── 01-modelzoo-catalog.md
      ├── 02-account-assets.md
      ├── 03-ai-app-tasks.md
      ├── 04-common-reference.md
-     └── 05-auth-and-api-key.md
+     ├── 05-auth-and-api-key.md
+     └── 06-media-upload-and-modelzoo-tasks.md
  ```
 
  ## API Endpoints
